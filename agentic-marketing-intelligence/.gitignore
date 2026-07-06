@@ -1,0 +1,39 @@
+# Environments
+.env
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+*.log
+
+# Data (raw/processed data should not be committed by default)
+data/raw/*
+data/processed/*
+data/exports/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/exports/.gitkeep
+
+# MLOps artifacts
+mlops/mlruns/
+mlops/model_registry/*
+!mlops/model_registry/.gitkeep
+
+# Reports
+reports/generated/*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

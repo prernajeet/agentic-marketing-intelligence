@@ -1,0 +1,26 @@
+campaign_id,campaign_name,campaign_type,channel,start_date,end_date,budget,target_segment,status,created_at
+1,Velvet Matte Lipstick Launch,email,google,2025-12-23,2026-01-14,36438.39,Regular,completed,2026-02-25T07:36:08.765551
+2,Winter Hydration Rescue,sms,sms,2025-08-10,2025-09-22,26150.2,All,paused,2025-08-12T13:56:16.042851
+3,Spring Skin Brightening Festival,sms,youtube,2025-10-27,2025-12-11,885.67,New,active,2026-07-04T05:46:41.671042
+4,Holiday Glitz Eyeshadow Set,social_media,sms,2026-01-31,2026-02-18,29702.16,At Risk,active,2026-04-12T08:25:47.934458
+5,Rose Gold Silk VIP,email,instagram,2026-05-25,2026-07-20,10736.81,Regular,paused,2025-10-24T10:43:59.785259
+6,Luminous Foundation Launch,email,facebook,2025-12-22,2026-01-21,949.09,Regular,paused,2026-06-16T03:45:00.044645
+7,Daily Skincare Rituals Promo,search,youtube,2025-11-20,2025-12-21,32593.55,Premium,paused,2026-05-02T03:58:39.543440
+8,Glow-Up Plumping Fest,social_media,facebook,2025-12-18,2026-01-26,35787.69,At Risk,completed,2025-08-12T13:50:48.887145
+9,Dewy Bronze Weekend Sale,social_media,instagram,2025-11-04,2025-12-14,36891.32,At Risk,active,2026-04-16T12:47:05.693932
+10,Flawless Primer Masterclass,display,instagram,2025-10-15,2025-11-07,22977.47,All,paused,2025-12-02T05:09:53.715874
+11,Anti-Aging Serum Pre-order,sms,sms,2025-11-18,2025-12-09,43111.52,All,completed,2026-06-22T19:16:34.434156
+12,Vitamin C Serum Glow Boost,social_media,google,2026-01-23,2026-03-17,43614.07,Regular,active,2026-05-04T07:41:27.820949
+13,Peach Lip Gloss Giveaway,sms,email,2025-09-18,2025-09-30,36072.32,All,active,2025-12-15T01:18:49.905961
+14,Velvet Blush Pop-up Event,search,facebook,2025-11-19,2025-12-30,18866.35,Premium,paused,2025-09-30T13:13:51.516827
+15,Clear Skin Cleansing Challenge,sms,email,2025-07-29,2025-09-09,5577.71,All,active,2026-06-30T07:00:08.945685
+16,BFF Brush Set Discount,email,instagram,2025-08-15,2025-09-04,30512.81,Regular,active,2026-06-20T19:44:53.165609
+17,Beauty Sponge Bundle,search,sms,2026-04-24,2026-06-07,31024.72,New,active,2025-11-17T22:41:46.232322
+18,Matte Foundation Flash Sale,social_media,instagram,2026-04-26,2026-05-07,7289.11,All,active,2026-07-02T22:45:34.470587
+19,Midnight Repair Face Mask Promo,social_media,email,2025-08-24,2025-09-27,23165.21,New,active,2025-08-01T00:52:13.336615
+20,Summer Glow Up Campaign,search,youtube,2026-01-01,2026-02-19,16147.65,Regular,paused,2025-12-10T07:21:51.504515
+21,Slategray Collection Launch,email,google,2026-01-01,2026-02-16,36418.21,Regular,paused,2026-01-22T04:07:19.709366
+22,Lightblue Collection Launch,display,facebook,2025-10-27,2025-12-17,24821.57,All,active,2025-10-13T19:40:04.442507
+23,Forestgreen Collection Launch,sms,email,2026-03-31,2026-04-10,42668.51,All,active,2025-11-01T17:26:12.560737
+24,Cyan Collection Launch,search,youtube,2025-07-08,2025-09-01,19818.8,At Risk,paused,2025-07-16T00:57:20.488776
+25,Turquoise Collection Launch,email,email,2026-03-02,2026-03-26,40653.19,Premium,paused,2025-09-18T08:06:08.901603

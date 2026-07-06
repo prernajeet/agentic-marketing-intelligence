@@ -1,0 +1,21 @@
+category_id,category_name,parent_category_id,description
+1,Lips,,"Lipsticks, lip glosses, oils, and lip liners for the perfect pout."
+2,Face,,"Foundations, concealers, primers, blushes, highlighters, and setting powders."
+3,Eyes,,"Eyeshadow palettes, eyeliners, mascaras, and brow defining products."
+4,Skincare,,"Serums, moisturizers, cleansers, toners, and hydrating face masks."
+5,Brushes & Tools,,"Professional makeup brush sets, sponges, and cosmetic tools."
+6,Lipsticks,1.0,Premium lipsticks category.
+7,Lip Glosses,1.0,Premium lip glosses category.
+8,Lip Liners,1.0,Premium lip liners category.
+9,Foundations,2.0,Premium foundations category.
+10,Concealers,2.0,Premium concealers category.
+11,Blushes & Bronzers,2.0,Premium blushes & bronzers category.
+12,Highlighters,2.0,Premium highlighters category.
+13,Eyeshadows,3.0,Premium eyeshadows category.
+14,Eyeliners,3.0,Premium eyeliners category.
+15,Mascaras,3.0,Premium mascaras category.
+16,Brow Makeup,3.0,Premium brow makeup category.
+17,Face Serums,4.0,Premium face serums category.
+18,Moisturizers,4.0,Premium moisturizers category.
+19,Cleansers,4.0,Premium cleansers category.
+20,Face Masks,4.0,Premium face masks category.
