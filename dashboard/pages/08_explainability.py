@@ -35,8 +35,16 @@ def compute_local_shap(model_result, cf_df, customer_id):
     import shap
     try:
         X_row = cust_row[feature_cols].fillna(0)
-        explainer = shap.TreeExplainer(model)
-        shap_vals = explainer.shap_values(X_row)
+        try:
+            explainer = shap.TreeExplainer(model)
+            shap_vals = explainer.shap_values(X_row)
+        except Exception:
+            try:
+                explainer = shap.LinearExplainer(model, cf_df[feature_cols].fillna(0))
+                shap_vals = explainer.shap_values(X_row)
+            except Exception:
+                explainer = shap.Explainer(model, cf_df[feature_cols].fillna(0))
+                shap_vals = explainer(X_row).values
         
         if hasattr(shap_vals, "values"):
             shap_vals = shap_vals.values

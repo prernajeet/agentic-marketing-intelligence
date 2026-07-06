@@ -43,8 +43,16 @@ def explainability_node(state: dict) -> dict:
 
             # SHAP Values alignment and extraction
             if SHAP_AVAILABLE and hasattr(model, "predict"):
-                explainer = shap.TreeExplainer(model)
-                shap_vals = explainer.shap_values(X_model.head(100))
+                try:
+                    explainer = shap.TreeExplainer(model)
+                    shap_vals = explainer.shap_values(X_model.head(100))
+                except Exception:
+                    try:
+                        explainer = shap.LinearExplainer(model, X_model.head(100))
+                        shap_vals = explainer.shap_values(X_model.head(100))
+                    except Exception:
+                        explainer = shap.Explainer(model, X_model.head(100))
+                        shap_vals = explainer(X_model.head(100)).values
                 
                 if hasattr(shap_vals, "values"):
                     shap_vals = shap_vals.values

@@ -67,9 +67,15 @@ def compute_local_shap(
         X_single = pd.DataFrame(scaler.transform(X_single), columns=feature_cols)
 
     try:
-        explainer = shap.TreeExplainer(model)
-        sv = explainer.shap_values(X_single)
-        base = float(explainer.expected_value) if not hasattr(explainer.expected_value, '__len__') else float(explainer.expected_value[1])
+        try:
+            explainer = shap.TreeExplainer(model)
+            sv = explainer.shap_values(X_single)
+            base = float(explainer.expected_value) if not hasattr(explainer.expected_value, '__len__') else float(explainer.expected_value[1])
+        except Exception:
+            explainer = shap.LinearExplainer(model, X_all)
+            sv = explainer.shap_values(X_single)
+            base = float(explainer.expected_value) if not hasattr(explainer.expected_value, '__len__') else float(explainer.expected_value[1])
+            
         # For binary classifiers shap_values is a list[array]
         if isinstance(sv, list):
             sv = sv[1]
