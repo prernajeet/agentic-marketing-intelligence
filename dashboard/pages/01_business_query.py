@@ -34,6 +34,14 @@ if run_btn and query.strip():
             if result.get("intent"):
                 st.info(f"**Detected Intent:** {result['intent']}")
 
+            if result.get("direct_answer"):
+                st.markdown(f"""
+                <div style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid #6366f1; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; margin-top: 1rem;">
+                    <div style="font-weight: 600; color: #fff; font-size: 1.1rem; margin-bottom: 0.3rem;">💡 AI Response</div>
+                    <div style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.6;">{result['direct_answer']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
             if result.get("business_insights"):
                 with st.expander("📊 Business Insights", expanded=True):
                     st.markdown(result["business_insights"])

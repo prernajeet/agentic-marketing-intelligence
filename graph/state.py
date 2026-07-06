@@ -53,6 +53,7 @@ class WorkflowState(TypedDict, total=False):
     simulation_results: Dict[str, Any]
 
     # Insights and recommendations
+    direct_answer: str
     business_insights: str
     recommendations: List[Dict[str, Any]]
 

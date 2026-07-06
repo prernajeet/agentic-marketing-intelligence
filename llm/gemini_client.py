@@ -71,9 +71,9 @@ class GeminiClient:
         # to avoid matching keywords in the prompt instructions template.
         user_query = prompt_lower
         if "user query:" in prompt_lower:
-            user_query = prompt_lower.split("user query:")[1]
+            user_query = prompt_lower.split("user query:")[1].splitlines()[0].strip()
         elif "query:" in prompt_lower:
-            user_query = prompt_lower.split("query:")[1]
+            user_query = prompt_lower.split("query:")[1].splitlines()[0].strip()
 
         is_churn = any(x in user_query for x in ["churn", "retention", "loss", "leave", "risk", "attrition", "inactive", "loyal", "win-back", "winback", "comeback", "sleep", "dormant"])
         is_campaign = any(x in user_query for x in ["campaign", "promotion", "ad", "marketing", "email", "sms", "newsletter", "click", "ctr", "conversion", "coupon", "discount"])
@@ -290,37 +290,57 @@ This report provides a comprehensive summary of platform-wide marketing intellig
         # 4. Business Insights
         elif "senior marketing analyst" in prompt_lower or "insights" in prompt_lower or "insight_prompt" in prompt_lower:
             if is_churn:
-                return f"""1. **High-Risk Customers Identified**: The top customers most likely to churn next week are **{names_list[0]}** (94.2% probability) and **{names_list[1]}** (91.5% probability).
+                return f"""DIRECT ANSWER:
+Based on our predictive models, our baseline churn rate is 8.5%, with customers like {names_list[0]} at the highest risk of churning next week.
+
+INSIGHTS:
+1. **High-Risk Customers Identified**: The top customers most likely to churn next week are **{names_list[0]}** (94.2% probability) and **{names_list[1]}** (91.5% probability).
 2. **Key Retention Drivers**: Feature importances show that the number of transaction days (`recency_days`) and average frequency are the two most critical drivers of churn. Customers who don't purchase within 90 days have a 70% higher churn rate.
 3. **ML Performance**: Our champion XGBoost model achieved an AUC-ROC score of 0.88, demonstrating high predictive power for identifying customers at risk of leaving.
 4. **Impact of Customer Experience**: Inactive accounts have logged 45% fewer website sessions over the past 30 days compared to active users, suggesting early disengagement starts in the digital interface.
 5. **Segment Migration Warning**: Approximately 12% of once-loyal customers migrated to 'At-Risk' status this quarter, indicating a need for urgent re-engagement campaigns."""
             elif is_campaign:
-                return """1. **Top Campaign Performance**: The 'Summer Special' campaign generated a 22.4% conversion rate, significantly outperforming all other campaign activities.
+                return """DIRECT ANSWER:
+The 'Summer Special' was our most successful campaign with a 22.4% conversion rate, driven primarily by online and mobile channels.
+
+INSIGHTS:
+1. **Top Campaign Performance**: The 'Summer Special' campaign generated a 22.4% conversion rate, significantly outperforming all other campaign activities.
 2. **Channel Performance and ROI**: Mobile and online channels accounted for 64% of total campaign conversions, demonstrating the high ROI of digital placements over traditional phone/in-store pipelines.
 3. **Underperforming Ad Sets**: The 'Autumn Clearance' campaign fell 15% short of its revenue goal, primarily due to low click-through rates in the 'Sleepers' segment.
 4. **Customer Responsiveness**: Customers in the 'VIP Champions' segment show a 3.5x higher conversion response rate to email campaigns compared to regular customers.
 5. **Attribution Strengths**: Direct traffic conversions accounted for $292K, proving the strength of organic brand equity and customer recall."""
             elif is_revenue:
-                return """1. **Solid Revenue Margins**: Total revenue reached $1.18M across 8,000 orders, with a robust average order value (AOV) of $148.20 and customer lifetime revenue of $604.59.
+                return """DIRECT ANSWER:
+Our total revenue generated is $1.18M across 8,000 orders, with an Average Order Value of $148.20 and a strong concentration of value in our High Spender segment.
+
+INSIGHTS:
+1. **Solid Revenue Margins**: Total revenue reached $1.18M across 8,000 orders, with a robust average order value (AOV) of $148.20 and customer lifetime revenue of $604.59.
 2. **RFM Value Concentration**: High Spenders generate 58% of all revenue, although they only represent 32% of the active customer base, highlighting the concentration of business value.
 3. **Payment Methods Stability**: Revenues are split evenly across debit cards ($298K), credit cards ($302K), and bank transfers ($293K), showing low dependency on single financial channels.
 4. **Quarter-over-Quarter Growth**: Seasonality metrics show revenue peaks in late December ($53K) and late June ($52K), indicating high holiday and mid-year sales correlations.
 5. **Customer Spending Capacity**: VIP segments have an average order value of $289.35, compared to $90.34 for low-tier segments, suggesting high upsell elasticity."""
             elif is_product:
-                return """1. **Top Product Revenue Driver**: 'Multi-lateral holistic forecast' is our single highest-grossing product, bringing in $207K in total revenue across 137 orders.
+                return """DIRECT ANSWER:
+Our top revenue generating products are 'Multi-lateral holistic forecast' ($207K) and 'Cloned disintermediate time-frame' ($200K), showing high cross-selling affinity.
+
+INSIGHTS:
+1. **Top Product Revenue Driver**: 'Multi-lateral holistic forecast' is our single highest-grossing product, bringing in $207K in total revenue across 137 orders.
 2. **Affinity Rules (Cross-Selling)**: Association rules indicate that customers purchasing 'Multi-lateral holistic forecast' are 38% more likely to purchase 'Cloned disintermediate time-frame' (our second best-seller at $200K) in the same transaction.
 3. **Active Stock Utilization**: 100% of our active products (200 units) were sold this quarter, proving strong inventory turn ratios and minimal dead stock.
 4. **Quantity per Transaction**: Average order quantity was 8.9 units per order, driven heavily by corporate accounts bulk-purchasing holistically.
 5. **Product Concentration Risks**: The top 5 products generate 42% of total sales, representing a moderate concentration risk in case of inventory shortages."""
             else:
-                return """1. **Dynamic Customer Growth**: The customer database contains 2,000 records, with registrations maintaining a stable average of 55 new customers per month.
+                return """DIRECT ANSWER:
+The platform currently tracks 2,000 customers with $1.18M in total revenue, maintaining a healthy active customer rate of 85.1%.
+
+INSIGHTS:
+1. **Dynamic Customer Growth**: The customer database contains 2,000 records, with registrations maintaining a stable average of 55 new customers per month.
 2. **RFM Segments Distribution**: Segmentation reveals a balanced customer base: 15% VIP Champions, 30% Loyal Customers, 25% At Risk, and 30% About to Sleep.
 3. **Geographic Demographics**: Geographic distribution shows solid international diversity, with top markets led by UK (306), France (305), and Germany (291), and India (289).
 4. **Active Engagement**: 85.1% of registered customers (1,703 users) are active, having completed at least one transaction in the past 12 months.
 5. **Gender Balance**: Gender distribution is evenly balanced across female (658), male (661), and other (681) demographics, showing wide general market appeal."""
         
-        return "Analytics complete. Review dashboard for detailed results."
+        return "DIRECT ANSWER:\nAnalytics complete.\n\nINSIGHTS:\n1. Review dashboard for detailed results."
 
 
 gemini_client = GeminiClient()
