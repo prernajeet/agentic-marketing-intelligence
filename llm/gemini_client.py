@@ -67,15 +67,22 @@ class GeminiClient:
                 "Marcus Vance (ID: 340)"
             ]
         
-        # Determine query context
-        is_churn = any(x in prompt_lower for x in ["churn", "retention", "loss", "leave", "risk", "attrition", "inactive", "loyal", "win-back", "winback", "comeback", "sleep", "dormant"])
-        is_campaign = any(x in prompt_lower for x in ["campaign", "promotion", "ad", "marketing", "email", "sms", "newsletter", "click", "ctr", "conversion", "coupon", "discount"])
-        is_revenue = any(x in prompt_lower for x in ["revenue", "sales", "spending", "rfm", "finance", "income", "value", "ltv", "clv", "profit", "purchase", "order", "amount", "monetary", "aov"])
-        is_product = any(x in prompt_lower for x in ["product", "item", "best seller", "category", "inventory", "stock", "brand", "popular", "sales volume"])
-        is_customer = any(x in prompt_lower for x in ["customer", "segment", "demographic", "country", "gender", "age", "users", "geographic"])
+        # Determine query context based only on the user query portion of the prompt,
+        # to avoid matching keywords in the prompt instructions template.
+        user_query = prompt_lower
+        if "user query:" in prompt_lower:
+            user_query = prompt_lower.split("user query:")[1]
+        elif "query:" in prompt_lower:
+            user_query = prompt_lower.split("query:")[1]
+
+        is_churn = any(x in user_query for x in ["churn", "retention", "loss", "leave", "risk", "attrition", "inactive", "loyal", "win-back", "winback", "comeback", "sleep", "dormant"])
+        is_campaign = any(x in user_query for x in ["campaign", "promotion", "ad", "marketing", "email", "sms", "newsletter", "click", "ctr", "conversion", "coupon", "discount"])
+        is_revenue = any(x in user_query for x in ["revenue", "sales", "spending", "rfm", "finance", "income", "value", "ltv", "clv", "profit", "purchase", "order", "amount", "monetary", "aov"])
+        is_product = any(x in user_query for x in ["product", "item", "best seller", "category", "inventory", "stock", "brand", "popular", "sales volume"])
+        is_customer = any(x in user_query for x in ["customer", "segment", "demographic", "country", "gender", "age", "users", "geographic"])
 
         # 1. Planning/Strategy Node (JSON Output Required)
-        if "nodes_to_run" in prompt_lower or "models_to_train" in prompt_lower or "json object with these fields" in prompt_lower or "respond only with valid json" in prompt_lower:
+        if "nodes_to_run" in prompt_lower or "models_to_train" in prompt_lower or "json object with these fields" in prompt_lower or "respond only with valid json" in prompt_lower or "marketing strategy consultant" in prompt_lower or "format as json array" in prompt_lower:
             import json
             if "intent" in prompt:
                 # Dynamic Planning Node Fallback
