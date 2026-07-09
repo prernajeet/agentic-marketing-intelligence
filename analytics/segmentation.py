@@ -31,16 +31,34 @@ def compute_segmentation(customer_features: pd.DataFrame, n_clusters: int = 5) -
         recency = row.get("recency_days", 999)
         frequency = row.get("frequency", 0)
         monetary = row.get("monetary", 0)
-        if recency < 30 and frequency > 5 and monetary > 500:
-            label = "High-Value Active"
-        elif recency < 90 and frequency > 2:
+        
+        # 1. Inactive / Churned (over 180 days of silence)
+        if recency > 180:
+            if monetary > 500:
+                label = "Lost High Spenders (Churned)"
+            else:
+                label = "Inactive / Churned"
+        # 2. At Risk (90 to 180 days of silence)
+        elif recency > 90:
+            if monetary > 500:
+                label = "At Risk High Spenders"
+            else:
+                label = "At Risk / Slipping"
+        # 3. High Value Active
+        elif recency <= 45 and frequency > 4 and monetary > 500:
+            label = "High-Value Active (Champions)"
+        # 4. Active Regulars
+        elif recency <= 90 and frequency > 2 and monetary > 300:
+            label = "Regular Spenders (Active)"
+        elif recency <= 90 and frequency > 2:
             label = "Regular Buyers"
-        elif recency > 180 and frequency <= 2:
-            label = "Churned"
+        # 5. Low frequency but high ticket
         elif monetary > 300:
-            label = "High Spenders"
+            label = "Occasional High Spenders"
+        # 6. Fallback
         else:
-            label = f"Segment {cluster_id}"
+            label = "Low-Spend / New Customers"
+            
         segment_labels[cluster_id] = label
 
     df["segment_label"] = df["segment_cluster"].map(segment_labels)

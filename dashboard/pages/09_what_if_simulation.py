@@ -137,6 +137,17 @@ if run_sim and params:
                             f"${revenue_saved:,.2f}",
                             delta=f"+${revenue_saved:,.2f}" if revenue_saved > 0 else "$0.00",
                         )
+                        
+                        with st.expander("🔍 Simulation Impact Explanations"):
+                            c_pe, c_tech = st.columns(2)
+                            c_pe.markdown("""
+                            **Plain English Interpretation:**
+                            * **What it means:** Simulates the financial and customer retention impact if we successfully nudge customer metrics (such as reducing days since last purchase).
+                            """)
+                            c_tech.markdown("""
+                            **Technical Implementation:**
+                            * **Logic:** Applies percentage deltas to customer feature matrices and re-runs prediction scores through the champion model.
+                            """)
 
                         # Recommendations based on parameters adjusted
                         recos = []

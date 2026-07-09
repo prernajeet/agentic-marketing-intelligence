@@ -81,6 +81,19 @@ try:
                 fig_pie = rfm_segment_pie(seg_dist)
                 fig_pie.update_layout(paper_bgcolor="rgba(0,0,0,0)", font_family="Inter")
                 st.plotly_chart(fig_pie, use_container_width=True)
+                
+                with st.expander("🔍 RFM Chart Explanations"):
+                    c_pe, c_tech = st.columns(2)
+                    c_pe.markdown("""
+                    **Plain English Interpretation:**
+                    * **What it means:** Groups customers into 8 behavior segments based on transaction history.
+                    * **Targeting Implication:** Spotlights 'Champions' (high spend, high frequency, recent) who drive revenue, and 'Lost / At Risk' customers who require win-back campaigns.
+                    """)
+                    c_tech.markdown("""
+                    **Technical Implementation:**
+                    * **Logic:** Computes Recency, Frequency, and Monetary metrics from raw transactions.
+                    * **Score:** Ranks each metric into equal quintiles (1-5), sums them to get an RFM score (3-15), and maps scores to named segments.
+                    """)
             else:
                 st.info("RFM segment distribution is empty.")
         except Exception as e:
@@ -122,6 +135,19 @@ try:
                         height=380,
                     )
                     st.plotly_chart(fig_bar, use_container_width=True)
+                    
+                    with st.expander("🔍 K-Means Chart Explanations"):
+                        c_pe, c_tech = st.columns(2)
+                        c_pe.markdown("""
+                        **Plain English Interpretation:**
+                        * **What it means:** Discovers natural clusters in customer behavior (like high spending but low frequency) without manual rules.
+                        * **Insights:** Reveals cluster sizes so you know which behavioral segments are largest and most valuable.
+                        """)
+                        c_tech.markdown("""
+                        **Technical Implementation:**
+                        * **Algorithm:** Runs `scikit-learn` KMeans with k=5 clusters.
+                        * **Features:** Standardizes Recency, Frequency, Monetary, and Avg Order Value using `StandardScaler` to balance numeric weights.
+                        """)
                 else:
                     # Fallback to scatter if no counts
                     fig2 = segment_scatter(segments_list)
@@ -139,6 +165,19 @@ try:
             fig_scatter = segment_scatter(segments_list)
             fig_scatter.update_layout(height=420)
             st.plotly_chart(fig_scatter, use_container_width=True)
+            
+            with st.expander("🔍 Scatter Explanations"):
+                c_pe, c_tech = st.columns(2)
+                c_pe.markdown("""
+                **Plain English Interpretation:**
+                * **Visual Grid:** Every dot is a customer. Left side = bought recently. Top side = spent a lot.
+                * **Goal:** Moves customers to the top-left quadrant (High Spend, High Recency) using targeted actions.
+                """)
+                c_tech.markdown("""
+                **Technical Implementation:**
+                * **Variables:** Recency (days since last purchase) vs. Monetary (lifetime spend), color-coded by the K-Means cluster label.
+                * **Rendering:** Uses Plotly Express `scatter()` with transparency overrides.
+                """)
 
             # Segment profiles table
             with st.expander("📋 Segment Cluster Profiles"):
@@ -159,7 +198,7 @@ try:
         st.error(f"Scatter error: {e}")
 
     # ── RFM Score Table ───────────────────────────────────────────────────────
-    section_header("📋", "Top Customer RFM Scores", badge="TOP 20")
+    section_header("📋", "Customer RFM Scores & Segments", badge="ALL CUSTOMERS")
     try:
         rfm = compute_rfm(cf_df)
         rfm_scores = rfm.get("scores", [])
@@ -175,7 +214,31 @@ try:
                         rfm_df["Name"] = rfm_df["first_name"] + " " + rfm_df["last_name"]
             display_cols = [c for c in ["customer_id", "Name", "rfm_score", "rfm_segment",
                                          "recency_days", "frequency", "monetary"] if c in rfm_df.columns]
-            st.dataframe(rfm_df[display_cols].head(20), use_container_width=True)
+            
+            # Show the entire customer RFM scores table
+            st.dataframe(rfm_df[display_cols], use_container_width=True)
+            
+            # Downloader form for entire dataset
+            csv = rfm_df[display_cols].to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="📥 Download Full RFM Customer Report (CSV)",
+                data=csv,
+                file_name="rfm_customer_segments.csv",
+                mime="text/csv",
+            )
+            
+            with st.expander("🔍 RFM Table Explanations"):
+                c_pe, c_tech = st.columns(2)
+                c_pe.markdown("""
+                **Plain English Interpretation:**
+                * **What this table shows:** The specific segment assignment and computed metrics for every customer.
+                * **How to use:** Export this list to target specific user groups via email or CRM tools.
+                """)
+                c_tech.markdown("""
+                **Technical Implementation:**
+                * **Data Aggregation:** Joins feature engineering outputs with static customer profiles.
+                * **Download Mode:** Encodes pandas DataFrame to CSV stream for client-side downloading.
+                """)
         else:
             st.info("No RFM scores computed.")
     except Exception as e:
@@ -190,6 +253,19 @@ try:
             fig_cohort = cohort_retention_heatmap(retention_df)
             fig_cohort.update_layout(paper_bgcolor="rgba(0,0,0,0)", font_family="Inter")
             st.plotly_chart(fig_cohort, use_container_width=True)
+            
+            with st.expander("🔍 Cohort Heatmap Explanations"):
+                c_pe, c_tech = st.columns(2)
+                c_pe.markdown("""
+                **Plain English Interpretation:**
+                * **What it means:** Measures customer loyalty over time. Tracks how long users continue buying month-after-month.
+                * **Implication:** If retention drops steeply in Month 1, focus on onboarding; if it drops in Month 3, focus on product quality and re-engagement.
+                """)
+                c_tech.markdown("""
+                **Technical Implementation:**
+                * **Logic:** Groups customers by registration month. Tracks what percentage make purchases in month 1, 2, 3... relative to month 0.
+                * **Colorscale:** Uses a 'RdPu' (Red-Purple) sequential colorscale to highlight high (darker) vs low (lighter) retention rates.
+                """)
         else:
             st.info("ℹ️ Not enough transaction data to compute cohort retention. Need at least 2 cohort periods.")
     except Exception as e:
@@ -216,6 +292,18 @@ try:
             height=380,
         )
         st.plotly_chart(fig_ct, use_container_width=True)
+        
+        with st.expander("🔍 Country Chart Explanations"):
+            c_pe, c_tech = st.columns(2)
+            c_pe.markdown("""
+            **Plain English Interpretation:**
+            * **What it means:** Ranks geographic locations based on the volume of registered customers.
+            * **Goal:** Directs marketing localized budgets where customer counts are densest.
+            """)
+            c_tech.markdown("""
+            **Technical Implementation:**
+            * **Method:** Sorts customer locations, counts occurrences using pandas aggregation, and renders a horizontal bar chart via Plotly.
+            """)
 
 except Exception as e:
     st.error(f"Error loading customer analytics: {e}")

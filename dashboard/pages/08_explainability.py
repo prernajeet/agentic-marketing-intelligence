@@ -134,11 +134,33 @@ if "customer_features" in features:
                         fig.update_layout(title=None)
                         st.plotly_chart(fig, use_container_width=True)
                         
+                        with st.expander("🔍 Feature Importance Explanations"):
+                            c_pe, c_tech = st.columns(2)
+                            c_pe.markdown("""
+                            **Plain English Interpretation:**
+                            * **What it means:** Ranks which metrics (e.g. recency_days, frequency) have the biggest influence on model decisions.
+                            """)
+                            c_tech.markdown("""
+                            **Technical Implementation:**
+                            * **Logic:** Computes Gini/impurity feature importance based on random forest or gradient boosting splits.
+                            """)
+                        
                     for model_name, shap_m in shap_vals.items():
                         st.markdown(f"#### SHAP Values — {model_name}")
                         fig = feature_importance_bar(shap_m, f"{model_name} (SHAP)")
                         fig.update_layout(title=None)
                         st.plotly_chart(fig, use_container_width=True)
+
+                        with st.expander("🔍 Global SHAP Explanations"):
+                            c_pe, c_tech = st.columns(2)
+                            c_pe.markdown("""
+                            **Plain English Interpretation:**
+                            * **What it means:** Calculates the average impact of each metric across the entire database.
+                            """)
+                            c_tech.markdown("""
+                            **Technical Implementation:**
+                            * **Logic:** Calculates SHAP values using `shap.TreeExplainer` or linear approximations, summing absolute contributions.
+                            """)
                 except Exception as e:
                     st.error(f"Explainability error: {e}")
                     
@@ -177,6 +199,19 @@ if "customer_features" in features:
                         # Plot local SHAP chart
                         fig_local = plot_local_shap(contributions, selected_name)
                         st.plotly_chart(fig_local, use_container_width=True)
+                        
+                        with st.expander("🔍 Individual Drivers Explanations"):
+                            c_pe, c_tech = st.columns(2)
+                            c_pe.markdown("""
+                            **Plain English Interpretation:**
+                            * **Red bars (positive):** Factors pushing this specific customer toward churn (risk factors).
+                            * **Blue bars (negative):** Factors anchoring this customer to the brand (protective factors).
+                            """)
+                            c_tech.markdown("""
+                            **Technical Implementation:**
+                            * **Logic:** Computes local attribution relative to population baseline.
+                            * **Explainer:** Uses `shap.TreeExplainer` on the champion model, falls back to linear or baseline explainer if tree structure is not available.
+                            """)
                         
                         # Interpret the SHAP values
                         st.markdown("#### 💡 Personalized Retention Diagnostic")

@@ -40,6 +40,19 @@ if st.button("Train & Compare Models"):
                     st.dataframe(df.style.highlight_max(axis=0, color="#2ecc71"), use_container_width=True)
                     champion = df["roc_auc"].idxmax()
                     st.success(f"🏆 Champion Model: **{champion}** (ROC-AUC: {df.loc[champion, 'roc_auc']:.4f})")
+                    
+                    with st.expander("🔍 Model Metrics Explanations"):
+                        c_pe, c_tech = st.columns(2)
+                        c_pe.markdown("""
+                        **Plain English Interpretation:**
+                        * **ROC-AUC (Accuracy index):** Measures how well the model separates churners from non-churners (higher is better, max 1.0).
+                        * **Precision/Recall:** Precision checks of flagged churners how many really churn, while Recall checks of all churners how many were caught.
+                        """)
+                        c_tech.markdown("""
+                        **Technical Implementation:**
+                        * **Models Trained:** Evaluates Random Forest, Gradient Boosting, and Logistic Regression on held-out test data.
+                        * **Selection:** Compares models on stratified holdout test splits and writes the highest ROC-AUC classifier to local ML registry.
+                        """)
             except Exception as e:
                 st.error(f"Training error: {e}")
     else:

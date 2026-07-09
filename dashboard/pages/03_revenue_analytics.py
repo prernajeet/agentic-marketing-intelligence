@@ -35,6 +35,19 @@ try:
     st.markdown("---")
     if rev.get("monthly_revenue"):
         st.plotly_chart(revenue_trend_line(rev["monthly_revenue"]), use_container_width=True)
+        
+        with st.expander("🔍 Revenue Trend Explanations"):
+            c_pe, c_tech = st.columns(2)
+            c_pe.markdown("""
+            **Plain English Interpretation:**
+            * **What it means:** Tracks total sales revenue on a month-by-month basis.
+            * **Business Insight:** Shows seasonal growth patterns, baseline run-rate trends, and transaction velocity.
+            """)
+            c_tech.markdown("""
+            **Technical Implementation:**
+            * **Variables:** X-axis is time (month index), Y-axis is monetary sales volume ($).
+            * **Logic:** Aggregates transaction amounts by date formatted to month strings (YYYY-MM).
+            """)
 
     col1, col2 = st.columns(2)
     with col1:

@@ -34,10 +34,34 @@ try:
 
     st.markdown("---")
     st.plotly_chart(campaign_funnel(camp), use_container_width=True)
+    
+    with st.expander("🔍 Campaign Funnel Explanations"):
+        c_pe, c_tech = st.columns(2)
+        c_pe.markdown("""
+        **Plain English Interpretation:**
+        * **What it means:** Measures how campaigns convert from exposure to response to final purchases.
+        * **Business Insight:** Pinpoints where prospects drop off in the conversion funnel to optimize copy or offer value.
+        """)
+        c_tech.markdown("""
+        **Technical Implementation:**
+        * **Logic:** Joins campaign targets with responses, calculating conversion rate percent.
+        * **Rendering:** Uses Plotly Graph Objects `Funnel` with custom sequential color mappings.
+        """)
 
     if camp.get("by_channel"):
         st.subheader("Campaigns by Channel")
         st.bar_chart(pd.DataFrame(list(camp["by_channel"].items()), columns=["Channel", "Count"]).set_index("Channel"))
+        
+        with st.expander("🔍 Channel Chart Explanations"):
+            c_pe, c_tech = st.columns(2)
+            c_pe.markdown("""
+            **Plain English Interpretation:**
+            * **What it means:** Distribution of running marketing campaigns across different media channels (e.g., social, email, SMS).
+            """)
+            c_tech.markdown("""
+            **Technical Implementation:**
+            * **Logic:** Counts occurrences of each channel column in campaigns dataset and renders using Streamlit's native `.bar_chart()`.
+            """)
 
 except Exception as e:
     st.error(f"Campaign analytics error: {e}")

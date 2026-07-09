@@ -39,11 +39,26 @@ with tab1:
                 cf_df = load_features()
                 model_results = train_churn_model(cf_df)
                 result = predict_churn(cf_df, model_results)
+                
                 col1, col2, col3 = st.columns(3)
                 col1.metric("Churn Rate", f"{result['churn_rate']*100:.1f}%")
                 col2.metric("At Risk Customers", result["churned_count"])
                 col3.metric("High Risk (>70%)", result["high_risk_count"])
+                
                 st.plotly_chart(churn_gauge(result["churn_rate"]), use_container_width=True)
+                
+                with st.expander("🔍 Churn Gauge Explanations"):
+                    c_pe, c_tech = st.columns(2)
+                    c_pe.markdown("""
+                    **Plain English Interpretation:**
+                    * **What it means:** The overall percentage of registered customers flagged as inactive/churned (quiet for 90+ days).
+                    * **Business Target:** Keep this gauge in the green zone (<20%) through win-back re-engagement triggers.
+                    """)
+                    c_tech.markdown("""
+                    **Technical Implementation:**
+                    * **Calculation:** Divides number of users with recency > 90 by total customer count.
+                    * **Gauge Zones:** Green (0-20% healthy), Yellow (20-50% warning), Red (50-100% critical).
+                    """)
                 
                 st.subheader("🎯 Automated Retention Action Hub")
                 hr_df = pd.DataFrame(result["high_risk_customers"])
@@ -111,5 +126,18 @@ with tab2:
                 col3.metric("Avg Lifetime CLV", f"${result['avg_clv_lifetime']:,.2f}")
                 st.subheader("Sample Predictions")
                 st.dataframe(pd.DataFrame(result["predictions"]).head(20), use_container_width=True)
+                
+                with st.expander("🔍 CLV Table Explanations"):
+                    c_pe, c_tech = st.columns(2)
+                    c_pe.markdown("""
+                    **Plain English Interpretation:**
+                    * **What it means:** Forecasts the monetary value that each customer will spend over 12-month, 24-month, and lifetime horizons.
+                    * **Business Goal:** Directs high-cost personalized loyalty offers to Platinum (highest value) cohorts.
+                    """)
+                    c_tech.markdown("""
+                    **Technical Implementation:**
+                    * **Logic:** Extrapolates 12m forecasts through fixed multipliers (24m = ×1.8, Lifetime = ×5.0).
+                    * **Model:** Trains Ridge, RandomForest, GradientBoosting, XGBoost, and LightGBM; selects champion on highest test R² score.
+                    """)
             except Exception as e:
                 st.error(f"CLV prediction error: {e}")

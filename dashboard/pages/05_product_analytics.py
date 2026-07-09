@@ -33,6 +33,19 @@ try:
     if top:
         st.subheader("Top Products by Revenue")
         st.dataframe(pd.DataFrame(top), use_container_width=True)
+        
+        with st.expander("🔍 Product Performance Explanations"):
+            c_pe, c_tech = st.columns(2)
+            c_pe.markdown("""
+            **Plain English Interpretation:**
+            * **What it means:** Ranks our inventory products by total dollar sales generated.
+            * **Business Action:** Use these high-demand items as featured products in marketing campaigns or entry-level bundles.
+            """)
+            c_tech.markdown("""
+            **Technical Implementation:**
+            * **Logic:** Groups transaction items by product ID and joins catalog names.
+            * **Calculations:** Sums revenue (`quantity * unit_price`) and counts units, sorting descending.
+            """)
 
 except Exception as e:
     st.error(f"Product analytics error: {e}")
