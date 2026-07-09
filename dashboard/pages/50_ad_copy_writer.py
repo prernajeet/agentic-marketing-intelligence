@@ -117,50 +117,61 @@ if st.session_state.copy_generated:
     prompt = st.session_state.copy_prompt
 
     section_header("✨", "Generated Copy", badge="AI OUTPUT")
-    st.markdown(f"""
-    <div class="glass-card" style='border-left: 3px solid #6366f1;'>
-        <pre style='white-space: pre-wrap; font-family: Inter, sans-serif; color: #e2e8f0; line-height: 1.8;'>{result_text}</pre>
-    </div>
-    """, unsafe_allow_html=True)
+    
+    col_a, col_b = st.columns(2)
+    with col_a:
+        st.markdown("#### 🅰️ Version A (Original)")
+        st.markdown(f"""
+        <div class="glass-card" style='border-left: 3px solid #6366f1; min-height: 220px;'>
+            <pre style='white-space: pre-wrap; font-family: Inter, sans-serif; color: #e2e8f0; line-height: 1.8;'>{result_text}</pre>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_b:
+        st.markdown("#### 🅱️ Version B (Alternative)")
+        if st.session_state.copy_variation_text:
+            st.markdown(f"""
+            <div class="glass-card" style='border-left: 3px solid #a855f7; min-height: 220px;'>
+                <pre style='white-space: pre-wrap; font-family: Inter, sans-serif; color: #e2e8f0; line-height: 1.8;'>{st.session_state.copy_variation_text}</pre>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.info("Click 'Generate A/B Variation' below to create a different alternative version of this copy.")
 
-    # Download buttons
-    col_d1, col_d2 = st.columns(2)
+    # Controls and downloads row
+    st.markdown("<br>", unsafe_allow_html=True)
+    col_d1, col_d2, col_d3 = st.columns(3)
     with col_d1:
         st.download_button(
-            "📥 Download as .txt",
+            "📥 Download Version A",
             data=result_text,
-            file_name=f"campaign_copy_{copy_type.replace(' ', '_').lower()}.txt",
+            file_name=f"campaign_copy_A.txt",
             mime="text/plain",
             use_container_width=True,
         )
     with col_d2:
-        st.download_button(
-            "📥 Download as .md",
-            data=f"# Campaign Copy: {copy_type}\n\n**Brand:** {brand_name}\n**Audience:** {target_audience}\n\n---\n\n{result_text}",
-            file_name=f"campaign_copy_{copy_type.replace(' ', '_').lower()}.md",
-            mime="text/markdown",
-            use_container_width=True,
-        )
-
-    # ── A/B Variation ─────────────────────────────────────────────────────────
-    with st.expander("🔀 Generate A/B Variation"):
-        gen_var_btn = st.button("Generate Alternative Version")
-        if gen_var_btn:
+        if st.session_state.copy_variation_text:
+            st.download_button(
+                "📥 Download Version B",
+                data=st.session_state.copy_variation_text,
+                file_name=f"campaign_copy_B.txt",
+                mime="text/plain",
+                use_container_width=True,
+            )
+        else:
+            st.button("📥 Download Version B (Empty)", disabled=True, use_container_width=True)
+            
+    with col_d3:
+        if st.button("🔀 Generate A/B Variation", use_container_width=True):
             with st.spinner("Creating variation…"):
                 variation_prompt = prompt.replace("Generate the", "Generate a DIFFERENT alternative version of the")
                 try:
                     from llm.gemini_client import GeminiClient
                     client = GeminiClient()
                     st.session_state.copy_variation_text = client.generate(variation_prompt, temperature=0.9)
+                    st.rerun()
                 except Exception:
                     st.session_state.copy_variation_text = f"[Variation] Act fast! {offer or 'Exclusive deals'} at {brand_name} — made for people like you. Limited time only. Click here!"
-        
-        if st.session_state.copy_variation_text:
-            st.markdown(f"""
-            <div class="glass-card" style='border-left: 3px solid #a855f7;'>
-                <pre style='white-space: pre-wrap; font-family: Inter, sans-serif; color: #e2e8f0; line-height: 1.8;'>{st.session_state.copy_variation_text}</pre>
-            </div>
-            """, unsafe_allow_html=True)
+                    st.rerun()
 
 else:
     # Tips section

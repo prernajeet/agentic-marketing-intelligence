@@ -90,6 +90,21 @@ if run_btn:
         section_header("📊", "Retention Heatmap")
         fig = retention_to_plotly(retention_df, granularity)
         st.plotly_chart(fig, use_container_width=True)
+        
+        with st.expander("🔍 Heatmap Explanations & Methodology"):
+            c_pe, c_tech = st.columns(2)
+            c_pe.markdown("""
+            **Plain English Interpretation:**
+            * **What it is:** Measures the percentage of customers acquired in a specific month/week (the rows) who returned to buy again in subsequent periods (the columns).
+            * **How to Read it:** Row `2024-01` Column `Month 1` tells you what percent of customers acquired in January 2024 purchased again in February 2024.
+            * **Interpretation:** Healthy SaaS/retail businesses look for a "retention plateau" where retention stabilizes instead of dropping to zero.
+            """)
+            c_tech.markdown("""
+            **Technical Implementation:**
+            * **Index Definition:** Cohort group defined by the user's first transaction timestamp.
+            * **Cohort Calculation:** Creates a pivot table of cohort size versus period index. Divided by initial cohort size to get percentages.
+            * **Plotly Heatmap:** Renders using custom sequential color scales (`RdPu` or similar) with annotation text labels mapped inside each grid cell.
+            """)
 
         # ── Raw Data Table ────────────────────────────────────────────────────
         with st.expander("📋 View Raw Retention Matrix"):
